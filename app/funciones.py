@@ -3,6 +3,8 @@ from typing import Optional, Dict, List
 
 import requests
 
+from app.colores import ROJO, RESET, VERDE, AMARILLO
+
 RUTA_FAVORITOS = "data/favoritos.json"
 
 
@@ -21,18 +23,18 @@ def buscar_pokemon(nombre: str) -> Optional[Dict]:
 
         # Si no existe el Pokémon
         if response.status_code == 404:
-            print("Pokémon no encontrado.")
+            print(f"{ROJO}Pokémon no encontrado.{RESET}")
             return None
 
         response.raise_for_status()
         data = response.json()
 
     except requests.exceptions.HTTPError as e:
-        print(f"Error de HTTP: {e}")
+        print(f"{ROJO}Error de HTTP: {e}{RESET}")
         return None
 
     except requests.exceptions.RequestException:
-        print("Error de conexión con la API.")
+        print(f"{ROJO}Error de conexión con la API.{RESET}")
         return None
 
     # Convertimos la respuesta en un diccionario
@@ -45,7 +47,7 @@ def buscar_pokemon(nombre: str) -> Optional[Dict]:
         "stats": {s["stat"]["name"]: s["base_stat"] for s in data["stats"]},
     }
 
-    print(f"\nPokémon encontrado: {pokemon['nombre'].capitalize()}")
+    print(f"\n{VERDE}Pokémon encontrado: {pokemon['nombre'].capitalize()}{RESET}")
     print(f"ID: {pokemon['id']}")
     print("Tipos:", ", ".join(pokemon["tipos"]))
     print("Stats:", pokemon["stats"])
@@ -74,7 +76,7 @@ def guardar_favorito(pokemon: Dict) -> None:
 
     # Comprobar si ya está guardado por ID
     if any(p["id"] == pokemon["id"] for p in favoritos):
-        print("Ese Pokémon ya está en favoritos.")
+        print(f"{AMARILLO}Ese Pokémon ya está en favoritos.{RESET}")
         return
 
     favoritos.append(pokemon)
@@ -82,7 +84,7 @@ def guardar_favorito(pokemon: Dict) -> None:
     with open(RUTA_FAVORITOS, "w", encoding="utf-8") as f:
         json.dump(favoritos, f, indent=4, ensure_ascii=False)
 
-    print("Pokémon guardado en favoritos.")
+    print(f"{VERDE}Pokémon guardado en favoritos.{RESET}")
 
 def eliminar_favorito(valor: str) -> None:
     """
@@ -93,7 +95,7 @@ def eliminar_favorito(valor: str) -> None:
     favoritos = cargar_favoritos()
 
     if not favoritos:
-        print("No hay un Pokémon guardados en favoritos.")
+        print(f"{AMARILLO}No hay un Pokémon guardados en favoritos.{RESET}")
         return
 
     valor_num = None  # Valor por defecto
@@ -114,10 +116,10 @@ def eliminar_favorito(valor: str) -> None:
         nuevos_fav = [p for p in favoritos if p["nombre"].lower() != valor]
 
     if pokemon_eliminado is None:
-        print("No se encontró un Pokémon con ese ID o nombre.")
+        print(f"{ROJO}No se encontró un Pokémon con ese ID o nombre.{RESET}")
         return
 
     with open(RUTA_FAVORITOS, "w", encoding="utf-8") as f:
         json.dump(nuevos_fav, f, indent=4, ensure_ascii=False)
 
-    print(f"Pokémon '{pokemon_eliminado['nombre'].capitalize()}' eliminado de favoritos.")
+    print(f"{VERDE}Pokémon '{pokemon_eliminado['nombre'].capitalize()}' eliminado de favoritos.{RESET}")

@@ -1,13 +1,16 @@
+from app.colores import MAGENTA, RESET, CIAN
+
+
 def mostrar_menu() -> None:
     """
     Muestra el menú principal de la aplicación.
     """
-    print("\n====== POKEDEX ======")
-    print("1. Busca Pokémon")
+    print(f"\n{MAGENTA}====== POKEDEX ======{RESET}")
+    print(f"{CIAN}1. Busca Pokémon")
     print("2. Ver favoritos")
     print("3. Eliminar favoritos")
     print("4. Salir")
-    print("=======================")
+    print(f"{MAGENTA}======================={RESET}")
 
 def pedir_opcion() -> str:
     """

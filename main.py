@@ -1,3 +1,4 @@
+from app.colores import CIAN, RESET, AMARILLO, ROJO, MAGENTA, VERDE
 from app.funciones import buscar_pokemon, cargar_favoritos, guardar_favorito, eliminar_favorito
 from app.io import mostrar_menu, pedir_opcion
 
@@ -11,7 +12,7 @@ def main():
         opcion = pedir_opcion()
 
         if opcion == "1":
-            nombre = input("Introduce nombre o ID del Pokémon: ").strip()
+            nombre = input(f"{CIAN}Introduce nombre o ID del Pokémon:{RESET} ").strip()
             pokemon = buscar_pokemon(nombre)
             while True:
                 if pokemon:
@@ -21,48 +22,48 @@ def main():
                         guardar_favorito(pokemon)
                         break
                     elif guardar == "n":
-                        print("No se guardó el Pokémon en favoritos.")
+                        print(f"{AMARILLO}No se guardó el Pokémon en favoritos.{RESET}")
                         break
                     else:
-                        print("Por favor, introduce 's' para sí o 'n' para no.")
+                        print(f"{ROJO}Por favor, introduce 's' para sí o 'n' para no.{RESET}")
 
         elif opcion == "2":
             favoritos = cargar_favoritos()
             if favoritos:
-                print("\n--- Pokémon Favoritos ---")
+                print(f"\n{MAGENTA}--- Pokémon Favoritos ---{RESET}")
                 for p in favoritos:
-                    print(f"\n--- {p['nombre'].capitalize()} ---")
+                    print(f"\n{CIAN}--- {p['nombre'].capitalize()} ---{RESET}")
                     print(f"ID: {p['id']}")
                     print(f"Altura: {p['altura']} m")
                     print(f"Peso: {p['peso']} kg")
                     print("Tipos:", ", ".join(p["tipos"]))
                     print("Stats:", p["stats"])
             else:
-                print("\nNo hay Pokémon guardados en favoritos.")
+                print(f"\n{AMARILLO}No hay Pokémon guardados en favoritos.{RESET}")
 
         elif opcion == "3":
             favoritos = cargar_favoritos()
 
             if not favoritos:
-                print("\nNo hay Pokémon guardados en favoritos.")
+                print(f"\n{AMARILLO}No hay Pokémon guardados en favoritos.{RESET}")
             else:
-                print("\n--- Pokémon Favoritos ---")
+                print(f"\n{MAGENTA}--- Pokémon Favoritos ---{RESET}")
                 for p in favoritos:
                     print(f"ID: {p['id']} | Nombre: {p['nombre'].capitalize()}")
 
-                print("\nPuedes eliminar un Pokémon por ID o por nombre")
+                print(f"\n{CIAN}Puedes eliminar un Pokémon por ID o por nombre{RESET}")
                 valor = input("Introduce el ID o nombre del Pokémon a eliminar: ").strip()
 
                 eliminar_favorito(valor)
 
         elif opcion == "4":
-            print("Saliendo del programa...")
+            print(f"{VERDE}Saliendo del programa...{RESET}")
             break
 
         else:
-            print("Opcion no válida.")
+            print(f"{ROJO}Opcion no válida.{RESET}")
 
-        input("\nPulsa ENTER para continuar...")
+        input(f"\n{AMARILLO}Pulsa ENTER para continuar...{RESET}")
 
 
 if __name__ == '__main__':
