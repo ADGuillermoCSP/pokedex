@@ -1,18 +1,52 @@
 import json
 from typing import Optional, Dict, List
 
+import requests
+
 RUTA_FAVORITOS = "data/favoritos.json"
 
 
 def buscar_pokemon(nombre: str) -> Optional[Dict]:
     """
-    Busca un Pokémon en la API.
+    Busca un Pokémon en la PokéAPI y devuelve un diccionario con sus datos.
     Args:
         nombre (str): Nombre o ID del Pokémon.
     Returns:
         dict | None: Datos del Pokémon o None si no se encuentra.
     """
-    pass
+    url = f"https://pokeapi.co/api/v2/pokemon/{nombre.lower()}"
+
+    try:
+        response = requests.get(url, timeout=5)
+
+        # Si no existe el Pokémon
+        if response.status_code == 404:
+            print("Pokémon no encontrado.")
+            return None
+
+        response.raise_for_status()
+        data = response.json()
+
+    except requests.exceptions.RequestException:
+        print("Error de conexión con la API.")
+        return None
+
+    # Convertimos la respuesta en un diccionario
+    pokemon = {
+        "id": data["id"],
+        "nombre": data["name"],
+        "altura": data["height"],
+        "peso": data["weight"],
+        "tipos": [t["type"]["name"] for t in data["types"]],
+        "stats": {s["stat"]["name"]: s["base_stat"] for s in data["stats"]},
+    }
+
+    print(f"\nPokémon encontrado: {pokemon['nombre'].capitalize()}")
+    print(f"ID: {pokemon['id']}")
+    print("Tipos:", ", ".join(pokemon["tipos"]))
+    print("Stats:", pokemon["stats"])
+
+    return pokemon
 
 def cargar_favoritos() -> List[Dict]:
     """
