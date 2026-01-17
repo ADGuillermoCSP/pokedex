@@ -91,3 +91,25 @@ def test_eliminar_favorito_existente():
     # Comprobamos que favoritos está vacío
     favoritos = cargar_favoritos()
     assert len(favoritos) == 0
+
+def test_eliminar_favorito_inexistente():
+    reset_favoritos()
+    pokemon_prueba = {
+        "id": 50,
+        "nombre": "sandshrew",
+        "altura": 0.6,
+        "peso": 12.0,
+        "tipos": ["ground"],
+        "stats": {"hp": 50, "attack": 75, "defense": 85}
+    }
+
+    # Guardamos Pokémon
+    guardar_favorito(pokemon_prueba)
+
+    # Intentamos eliminar un Pokémon que no existe
+    eliminar_favorito("999")
+
+    # Comprobamos que favoritos sigue igual
+    favoritos = cargar_favoritos()
+    assert len(favoritos) == 1
+    assert favoritos[0]["id"] == 50
