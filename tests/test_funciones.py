@@ -117,7 +117,7 @@ def test_eliminar_favorito_inexistente():
 # ----------------------------
 # Test buscar_pokemon con mocks
 # ----------------------------
-def test_buscar_pokemon_devuelve_datos_pytest(mocker):
+def test_buscar_pokemon_devuelve_datos(mocker):
     reset_favoritos()
 
     # Creamos un mock de requests.get
@@ -145,3 +145,14 @@ def test_buscar_pokemon_devuelve_datos_pytest(mocker):
     assert resultado["nombre"] == "pikachu"
     assert resultado["tipos"] == ["electric"]
     assert resultado["stats"]["hp"] == 35
+
+def test_buscar_pokemon_no_encontrado(mocker):
+    reset_favoritos()
+
+    fake_response = mocker.Mock()
+    fake_response.status_code = 404
+
+    mocker.patch("app.funciones.requests.get", return_value=fake_response)
+
+    resultado = buscar_pokemon("noexiste123")
+    assert resultado is None
