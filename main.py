@@ -11,8 +11,12 @@ def main():
         opcion = pedir_opcion()
 
         if opcion == "1":
-            nombre = input("Introduce nombre o ID del Pokémon: ")
-            buscar_pokemon(nombre)  # Aún sin implementar
+            nombre = input("Introduce nombre o ID del Pokémon: ").strip()
+            pokemon = buscar_pokemon(nombre)
+            if pokemon:
+                guardar = input("\n¿Quieres guardar este Pokémon en favoritos? (s/n): ").strip().lower()
+                if guardar == "s":
+                    guardar_favorito(pokemon)
 
         elif opcion == "2":
             cargar_favoritos()  # Aún sin implementar
