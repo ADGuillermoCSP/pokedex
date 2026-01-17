@@ -104,17 +104,20 @@ def eliminar_favorito(valor: str) -> None:
     except ValueError:
         eliminar_por_id = False
 
+    # Buscar Pokémon antes de eliminarlo
     if eliminar_por_id:
+        pokemon_eliminado = next((p for p in favoritos if p["id"] == valor_num), None)
         nuevos_fav = [p for p in favoritos if p["id"] != valor_num]
     else:
         valor = valor.lower()
+        pokemon_eliminado = next((p for p in favoritos if p["nombre"].lower() == valor), None)
         nuevos_fav = [p for p in favoritos if p["nombre"].lower() != valor]
 
-    if len(nuevos_fav) == len(favoritos):
+    if pokemon_eliminado is None:
         print("No se encontró un Pokémon con ese ID o nombre.")
         return
 
     with open(RUTA_FAVORITOS, "w", encoding="utf-8") as f:
         json.dump(nuevos_fav, f, indent=4, ensure_ascii=False)
 
-    print("Pokémon eliminado de favoritos.")
+    print(f"Pokémon '{pokemon_eliminado['nombre'].capitalize()}' eliminado de favoritos.")
