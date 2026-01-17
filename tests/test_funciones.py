@@ -3,7 +3,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from app.funciones import cargar_favoritos, guardar_favorito
+from app.funciones import cargar_favoritos, guardar_favorito, eliminar_favorito
 
 RUTA_TEST = "data/favoritos.json"
 
@@ -67,3 +67,27 @@ def test_guardar_favorito_no_duplicados():
     favoritos = cargar_favoritos()
     assert len(favoritos) == 1
     assert favoritos[0]["id"] == 500
+
+# ----------------------------
+# Test eliminar_favorito
+# ----------------------------
+def test_eliminar_favorito_existente():
+    reset_favoritos()
+    pokemon_prueba = {
+        "id": 777,
+        "nombre": "deletemon",
+        "altura": 0.7,
+        "peso": 13.0,
+        "tipos": ["dark"],
+        "stats": {"hp": 40, "attack": 40, "defense": 40}
+    }
+
+    # Guardamos Pokémon
+    guardar_favorito(pokemon_prueba)
+
+    # Eliminamos Pokémon por ID
+    eliminar_favorito("777")
+
+    # Comprobamos que favoritos está vacío
+    favoritos = cargar_favoritos()
+    assert len(favoritos) == 0
