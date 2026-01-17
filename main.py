@@ -41,8 +41,19 @@ def main():
                 print("\nNo hay Pokémon guardados en favoritos.")
 
         elif opcion == "3":
-            id_poke = input("Introduce el ID a eliminar: ")
-            eliminar_favorito(id_poke)
+            favoritos = cargar_favoritos()
+
+            if not favoritos:
+                print("\nNo hay Pokémon guardados en favoritos.")
+            else:
+                print("\n--- Pokémon Favoritos ---")
+                for p in favoritos:
+                    print(f"ID: {p['id']} | Nombre: {p['nombre'].capitalize()}")
+
+                print("\nPuedes eliminar un Pokémon por ID o por nombre")
+                valor = input("Introduce el ID o nombre del Pokémon a eliminar: ").strip()
+
+                eliminar_favorito(valor)
 
         elif opcion == "4":
             print("Saliendo del programa...")

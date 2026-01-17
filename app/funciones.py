@@ -84,24 +84,34 @@ def guardar_favorito(pokemon: Dict) -> None:
 
     print("Pokémon guardado en favoritos.")
 
-def eliminar_favorito(id_pokemon: str) -> None:
+def eliminar_favorito(valor: str) -> None:
     """
-    Elimina un Pokémon favorito por ID.
+    Elimina un Pokémon favorito por ID o por nombre.
     Args:
-        id_pokemon (str): ID del Pokémon a eliminar.
+        valor (str): ID numérico o nombre del Pokémon a eliminar.
     """
     favoritos = cargar_favoritos()
 
-    try:
-        id_num = int(id_pokemon)
-    except ValueError:
-        print("Debes introducir un número válido.")
+    if not favoritos:
+        print("No hay un Pokémon guardados en favoritos.")
         return
 
-    nuevos_fav = [p for p in favoritos if p["id"] != id_num]
+    valor_num = None  # Valor por defecto
+
+    try:
+        valor_num = int(valor)
+        eliminar_por_id = True
+    except ValueError:
+        eliminar_por_id = False
+
+    if eliminar_por_id:
+        nuevos_fav = [p for p in favoritos if p["id"] != valor_num]
+    else:
+        valor = valor.lower()
+        nuevos_fav = [p for p in favoritos if p["nombre"].lower() != valor]
 
     if len(nuevos_fav) == len(favoritos):
-        print("No se encontró un Pokémon con ese ID.")
+        print("No se encontró un Pokémon con ese ID o nombre.")
         return
 
     with open(RUTA_FAVORITOS, "w", encoding="utf-8") as f:
