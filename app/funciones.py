@@ -35,8 +35,8 @@ def buscar_pokemon(nombre: str) -> Optional[Dict]:
     pokemon = {
         "id": data["id"],
         "nombre": data["name"],
-        "altura": data["height"],
-        "peso": data["weight"],
+        "altura": data["height"] / 10,
+        "peso": data["weight"] / 10,
         "tipos": [t["type"]["name"] for t in data["types"]],
         "stats": {s["stat"]["name"]: s["base_stat"] for s in data["stats"]},
     }

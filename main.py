@@ -19,7 +19,18 @@ def main():
                     guardar_favorito(pokemon)
 
         elif opcion == "2":
-            cargar_favoritos()  # Aún sin implementar
+            favoritos = cargar_favoritos()
+            if favoritos:
+                print("\n--- Pokémon Favoritos ---")
+                for p in favoritos:
+                    print(f"\n--- {p['nombre'].capitalize()} ---")
+                    print(f"ID: {p['id']}")
+                    print(f"Altura: {p['altura']} m")
+                    print(f"Peso: {p['peso']} kg")
+                    print("Tipos:", ", ".join(p["tipos"]))
+                    print("Stats:", p["stats"])
+            else:
+                print("\nNo hay Pokémon guardados en favoritos.")
 
         elif opcion == "3":
             id_poke = input("Introduce el ID a eliminar: ")
