@@ -47,3 +47,23 @@ def test_guardar_favorito_anade_pokemon():
     assert len(favoritos) == 1
     assert favoritos[0]["id"] == 999
     assert favoritos[0]["nombre"] == "testmon"
+
+def test_guardar_favorito_no_duplicados():
+    reset_favoritos()
+    pokemon_prueba = {
+        "id": 500,
+        "nombre": "duplicatemon",
+        "altura": 1.2,
+        "peso": 12.0,
+        "tipos": ["fire"],
+        "stats": {"hp": 60, "attack": 60, "defense": 60}
+    }
+
+    # Guardamos el Pokémon dos veces
+    guardar_favorito(pokemon_prueba)
+    guardar_favorito(pokemon_prueba)  #Intento duplicado
+
+    # Comprobamos que solo hay uno
+    favoritos = cargar_favoritos()
+    assert len(favoritos) == 1
+    assert favoritos[0]["id"] == 500
