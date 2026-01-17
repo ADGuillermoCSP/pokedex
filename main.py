@@ -13,10 +13,18 @@ def main():
         if opcion == "1":
             nombre = input("Introduce nombre o ID del Pokémon: ").strip()
             pokemon = buscar_pokemon(nombre)
-            if pokemon:
-                guardar = input("\n¿Quieres guardar este Pokémon en favoritos? (s/n): ").strip().lower()
-                if guardar == "s":
-                    guardar_favorito(pokemon)
+            while True:
+                if pokemon:
+                    guardar = input("\n¿Quieres guardar este Pokémon en favoritos? (s/n): ").strip().lower()
+
+                    if guardar == "s":
+                        guardar_favorito(pokemon)
+                        break
+                    elif guardar == "n":
+                        print("No se guardó el Pokémon en favoritos.")
+                        break
+                    else:
+                        print("Por favor, introduce 's' para sí o 'n' para no.")
 
         elif opcion == "2":
             favoritos = cargar_favoritos()
@@ -34,7 +42,7 @@ def main():
 
         elif opcion == "3":
             id_poke = input("Introduce el ID a eliminar: ")
-            eliminar_favorito(id_poke)  # Aún sin implementar
+            eliminar_favorito(id_poke)
 
         elif opcion == "4":
             print("Saliendo del programa...")

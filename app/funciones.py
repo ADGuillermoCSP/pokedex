@@ -27,6 +27,10 @@ def buscar_pokemon(nombre: str) -> Optional[Dict]:
         response.raise_for_status()
         data = response.json()
 
+    except requests.exceptions.HTTPError as e:
+        print(f"Error de HTTP: {e}")
+        return None
+
     except requests.exceptions.RequestException:
         print("Error de conexión con la API.")
         return None
