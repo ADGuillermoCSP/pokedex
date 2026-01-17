@@ -3,7 +3,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from app.funciones import cargar_favoritos, guardar_favorito, eliminar_favorito
+from app.funciones import cargar_favoritos, guardar_favorito, eliminar_favorito, buscar_pokemon
 
 RUTA_TEST = "data/favoritos.json"
 
@@ -113,3 +113,35 @@ def test_eliminar_favorito_inexistente():
     favoritos = cargar_favoritos()
     assert len(favoritos) == 1
     assert favoritos[0]["id"] == 50
+
+# ----------------------------
+# Test buscar_pokemon con mocks
+# ----------------------------
+def test_buscar_pokemon_devuelve_datos_pytest(mocker):
+    reset_favoritos()
+
+    # Creamos un mock de requests.get
+    fake_response = mocker.Mock()
+    fake_response.status_code = 200
+    fake_response.json.return_value = {
+        "id": 25,
+        "name": "pikachu",
+        "types": [{"type": {"name": "electric"}}],
+        "stats": [
+            {"stat": {"name": "hp"}, "base_stat": 35},
+            {"stat": {"name": "attack"}, "base_stat": 55},
+            {"stat": {"name": "defense"}, "base_stat": 40},
+        ],
+        "height": 0.4,
+        "weight": 6.0
+    }
+
+    # Sustituimos requests.get por nuestro mock
+    mocker.patch("app.funciones.requests.get", return_value=fake_response)
+
+    resultado = buscar_pokemon("pikachu")
+
+    assert resultado["id"] == 25
+    assert resultado["nombre"] == "pikachu"
+    assert resultado["tipos"] == ["electric"]
+    assert resultado["stats"]["hp"] == 35
