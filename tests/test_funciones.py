@@ -1,6 +1,9 @@
 import json
 import sys
 import os
+
+from requests import RequestException
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from app.funciones import cargar_favoritos, guardar_favorito, eliminar_favorito, buscar_pokemon
@@ -118,8 +121,6 @@ def test_eliminar_favorito_inexistente():
 # Test buscar_pokemon con mocks
 # ----------------------------
 def test_buscar_pokemon_devuelve_datos(mocker):
-    reset_favoritos()
-
     # Creamos un mock de requests.get
     fake_response = mocker.Mock()
     fake_response.status_code = 200
@@ -147,12 +148,17 @@ def test_buscar_pokemon_devuelve_datos(mocker):
     assert resultado["stats"]["hp"] == 35
 
 def test_buscar_pokemon_no_encontrado(mocker):
-    reset_favoritos()
-
     fake_response = mocker.Mock()
     fake_response.status_code = 404
 
     mocker.patch("app.funciones.requests.get", return_value=fake_response)
 
     resultado = buscar_pokemon("noexiste123")
+    assert resultado is None
+
+def test_buscar_pokemon_error_excepcion(mocker):
+    # Simulamos excepción de requests
+    mocker.patch("app.funciones.requests.get", side_effect=RequestException("Fallo de red"))
+
+    resultado = buscar_pokemon("pikachu")
     assert resultado is None
