@@ -33,7 +33,16 @@ def main():
                 input(f"{AMARILLO}Pulsa ENTER para volver al menú...{RESET}")
                 continue
 
-            # Preguntar si quiere guardarlo como favorito
+            # Cargar favoritos
+            favoritos = cargar_favoritos()
+
+            # Comprobar si ya está guardado
+            if any(p["id"] == pokemon["id"] for p in favoritos):
+                print(f"{AMARILLO}Este Pokémon ya está en favoritos.{RESET}")
+                input(f"\n{AMARILLO}Pulsa ENTER para continuar...{RESET}")
+                continue
+
+            # Si no está guardado, preguntar si quiere guardarlo como favorito
             while True:
                 guardar = input("\n¿Quieres guardar este Pokémon en favoritos? (s/n): ").strip().lower()
 
