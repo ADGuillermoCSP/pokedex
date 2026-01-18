@@ -15,7 +15,9 @@ RUTA_TEST = "data/favoritos.json"
 # Helpers para limpiar y restaurar
 # ----------------------------
 def reset_favoritos():
-    """Borra el contenido de favoritos.json"""
+    """
+    Borra el contenido de favoritos.json
+    """
     with open(RUTA_TEST, "w", encoding="utf-8") as f:
         json.dump([], f)
 
